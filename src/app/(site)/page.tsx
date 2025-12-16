@@ -1,5 +1,3 @@
-"use client";
-
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import Benefits from "@/sections/Benefits";
@@ -8,8 +6,11 @@ import HowItWorks from "@/sections/HowItWorks";
 import Pricing from "@/sections/Pricing";
 import Testimonials from "@/sections/Testimonials";
 import WhyUs from "@/sections/WhyUs";
+import getActiveProductsWithPrices from "../../../actions/getActiveProductsWithPrices";
 
-export default function Home() {
+export default async function Home() {
+	const products = await getActiveProductsWithPrices();
+
 	return (
 		<main>
 			<div className="bg-[#0D121F] px-[100px] text-white">
@@ -20,7 +21,7 @@ export default function Home() {
 			<HowItWorks />
 			<WhyUs />
 			<Testimonials />
-			<Pricing />
+			<Pricing products={products} />
 			<Footer />
 		</main>
 	);

@@ -1,8 +1,10 @@
+'use client';
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import { useState } from "react";
+
 
 const links = [
 	{

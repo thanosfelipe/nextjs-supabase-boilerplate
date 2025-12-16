@@ -1,34 +1,105 @@
-import { FC } from "react";
-import Pricing from "..";
+"use client";
+
+import { FC, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useUser } from "@/hooks/useUser";
+import { useRouter } from "next/navigation";
 
-const PricingCard: FC<Pricing> = (props) => {
+interface Feature {
+	name: string;
+	isIncluded: boolean;
+}
+
+interface PricingCardProps {
+	productName: string;
+	priceId: string;
+	title: string;
+	description: string;
+	pricing: string;
+	pricingUnit: string;
+	interval: string;
+	features: Feature[];
+	popular?: boolean;
+	trialDays?: number;
+}
+
+const PricingCard: FC<PricingCardProps> = ({
+	productName,
+	priceId,
+	title,
+	description,
+	pricing,
+	pricingUnit,
+	interval,
+	features,
+	popular,
+	trialDays,
+}) => {
+	const [isLoading, setIsLoading] = useState(false);
+	const { user } = useUser();
+	const router = useRouter();
+
+	const handleCheckout = async () => {
+		if (!user) {
+			router.push("/sign-in");
+			return;
+		}
+
+		setIsLoading(true);
+
+		try {
+			const response = await fetch("/api/checkout", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					priceId,
+					productName,
+				}),
+			});
+
+			const data = await response.json();
+
+			if (data.url) {
+				window.location.href = data.url;
+			} else {
+				console.error("No checkout URL returned");
+			}
+		} catch (error) {
+			console.error("Checkout error:", error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
 	return (
-		<div className="bg-[#F3F5F7] p-6 rounded-lg flex flex-col gap-4 w-[350px]">
+		<div className="bg-[#1A1B25] p-6 rounded-lg flex flex-col gap-4 w-[350px] mb-6">
 			<div className="flex w-full items-center justify-between">
 				<div className="flex items-center gap-3">
-					<Image src={props.icon} alt={props.title} width={30} height={30} />
-					<h1 className="text-[24px] font-semibold">{props.title}</h1>
+					<h1 className="text-[24px] font-semibold text-white">{title}</h1>
 				</div>
-				{props.popular && (
+				{popular && (
 					<Badge className="bg-[#0D121F] p-2 rounded-full px-4">Popular</Badge>
 				)}
 			</div>
-			<p>{props.subTitle}</p>
+			{trialDays && (
+				<Badge className="w-fit bg-purple-600 text-white">
+					{trialDays}-day free trial
+				</Badge>
+			)}
 			<div className="flex items-center gap-2">
-				<h1 className="text-[30px] font-semibold">
-					{props.pricingUnit}
-					{props.pricing}
+				<h1 className="text-[30px] font-semibold text-white">
+					{pricingUnit}
+					{pricing}
 				</h1>
-				<p className="text-[16px] font-normal">
-					{props.type === "monthly" ? "/month" : "/year"}
-				</p>
+				<p className="text-[16px] font-normal text-gray-400">/{interval}</p>
 			</div>
-			<p>{props.description}</p>
+			<p className="text-gray-400">{description}</p>
 			<div className="flex flex-col gap-4 my-4">
-				{props.features.map((feature, index) => {
+				{features.map((feature, index) => {
 					return (
 						<div className="flex items-center gap-2" key={index}>
 							{feature.isIncluded ? (
@@ -41,17 +112,22 @@ const PricingCard: FC<Pricing> = (props) => {
 							) : (
 								<Image
 									src="/images/pricing/not-included.svg"
-									alt="included"
+									alt="not included"
 									width={20}
 									height={20}
 								/>
 							)}
-							<p>{feature.name}</p>
+							<p className="text-white">{feature.name}</p>
 						</div>
 					);
 				})}
 			</div>
-			<Button className="w-[80%] mx-auto">{props.button}</Button>
+			<Button
+				className="w-[80%] mx-auto"
+				onClick={handleCheckout}
+				disabled={isLoading}>
+				{isLoading ? "Loading..." : "Get Started"}
+			</Button>
 		</div>
 	);
 };

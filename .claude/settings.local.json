@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__stripe__get_stripe_account_info",
+      "mcp__stripe__list_products",
+      "mcp__stripe__list_prices",
+      "mcp__stripe__create_product",
+      "mcp__stripe__create_price"
+    ]
+  }
+}
