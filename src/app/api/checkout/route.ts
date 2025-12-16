@@ -34,8 +34,8 @@ export async function POST(request: Request) {
 			email: user.email || "",
 		});
 
-		// Add 7-day trial for Starter plan
-		const isStarterPlan = productName?.toLowerCase() === "starter";
+		// Add 7-day trial for Basic plan
+		const isBasicPlan = productName?.toLowerCase() === "basic";
 
 		const session = await stripe.checkout.sessions.create({
 			customer,
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
 			],
 			mode: "subscription",
 			allow_promotion_codes: true,
-			subscription_data: isStarterPlan
+			subscription_data: isBasicPlan
 				? {
 						trial_period_days: 7,
 				  }

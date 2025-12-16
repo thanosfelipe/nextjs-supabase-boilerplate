@@ -9,7 +9,7 @@ interface PricingProps {
 
 // Feature lists for each plan
 const planFeatures: Record<string, { name: string; isIncluded: boolean }[]> = {
-	Starter: [
+	Basic: [
 		{ name: "Sync across devices", isIncluded: true },
 		{ name: "5 workspaces", isIncluded: true },
 		{ name: "Collaborate with 5 users", isIncluded: true },
@@ -18,7 +18,7 @@ const planFeatures: Record<string, { name: string; isIncluded: boolean }[]> = {
 		{ name: "100+ integrations", isIncluded: false },
 	],
 	Pro: [
-		{ name: "Everything in Starter", isIncluded: true },
+		{ name: "Everything in Basic", isIncluded: true },
 		{ name: "Unlimited workspaces", isIncluded: true },
 		{ name: "Collaborative workspace", isIncluded: true },
 		{ name: "Sharing permissions", isIncluded: true },
@@ -59,7 +59,7 @@ const Pricing = ({ products }: PricingProps) => {
 
 					const features = planFeatures[product.name || ""] || [];
 					const isPopular = product.name === "Pro";
-					const hasTrialPeriod = product.name === "Starter";
+					const hasTrialPeriod = product.name === "Basic";
 
 					return (
 						<PricingCard
