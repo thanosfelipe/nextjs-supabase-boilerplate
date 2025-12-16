@@ -8,6 +8,8 @@ import Testimonials from "@/sections/Testimonials";
 import WhyUs from "@/sections/WhyUs";
 import getActiveProductsWithPrices from "../../../actions/getActiveProductsWithPrices";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
 	const products = await getActiveProductsWithPrices();
 
