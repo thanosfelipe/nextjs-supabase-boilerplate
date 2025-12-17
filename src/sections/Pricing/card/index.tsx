@@ -80,16 +80,17 @@ const PricingCard: FC<PricingCardProps> = ({
 			<div className="flex w-full items-center justify-between">
 				<div className="flex items-center gap-3">
 					<h1 className="text-[24px] font-semibold text-white">{title}</h1>
-				</div>
-				{popular && (
-					<Badge className="bg-[#0D121F] p-2 rounded-full px-4">Popular</Badge>
-				)}
-			</div>
-			{trialDays && (
+					{trialDays && (
 				<Badge className="w-fit bg-purple-600 text-white">
 					{trialDays}-day free trial
 				</Badge>
 			)}
+				</div>
+				{popular && (
+					<Badge className="w-fit bg-purple-600 text-white">Popular</Badge>
+				)}
+			</div>
+			
 			<div className="flex items-center gap-2">
 				<h1 className="text-[30px] font-semibold text-white">
 					{pricingUnit}
